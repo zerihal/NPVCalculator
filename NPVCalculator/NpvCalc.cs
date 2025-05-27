@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NPVCalculator
 {
-    public class StdNpvCalc
+    public class NpvCalc
     {
         /// <summary>
         /// 
@@ -27,12 +27,12 @@ namespace NPVCalculator
         /// </summary>
         public int NPVDecimalPlaces { get; set; } = 0;
 
-        public StdNpvCalc()
+        public NpvCalc()
         {
             NCFs = new List<decimal>();
         }
 
-        public StdNpvCalc(IList<decimal> nCFs, double discountRate) : this()
+        public NpvCalc(IList<decimal> nCFs, double discountRate) : this()
         {
             NCFs = nCFs;
             DiscountRate = discountRate;
