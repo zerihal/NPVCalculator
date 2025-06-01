@@ -14,5 +14,16 @@
 
             var npvs = npvCalc.GetNPVs(100000);
         }
+
+        [Fact]
+        public void RoundedNpvCalcTests()
+        {
+            var NCFs = new List<decimal> { 85000, 85000, 110000, 115000, 135000 };
+
+            var npvCalc = new NpvCalc(NCFs, 25) { UseRoundedDiscountingFactor = true };
+            Assert.True(npvCalc.NCFs.Count == 5);
+
+            var npvs = npvCalc.GetNPVs(275000);
+        }
     }
 }

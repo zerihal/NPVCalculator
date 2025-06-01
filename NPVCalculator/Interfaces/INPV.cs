@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using NPVCalculator.Objects;
+using System.Collections.Generic;
 
 namespace NPVCalculator.Interfaces
 {
-    public interface INPVs
+    public interface INPV
     {
         /// <summary>
         /// 
         /// </summary>
-        IDictionary<decimal, decimal?> NPVsAndDiscountFactors { get; }
+        IList<NpvAndDiscountFactor> IndividualNPVsAndDiscountFactors { get; }
 
         /// <summary>
         /// 
@@ -18,6 +19,6 @@ namespace NPVCalculator.Interfaces
         /// 
         /// </summary>
         /// <param name="npvAndDiscountFactor"></param>
-        void Add(KeyValuePair<decimal, decimal?> npvAndDiscountFactor);
+        void Add(decimal npv, decimal? discountFactor);
     }
 }
