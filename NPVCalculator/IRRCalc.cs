@@ -6,6 +6,19 @@ namespace NPVCalculator
 {
     public static class IRRCalc
     {
+        /// <summary>
+        /// Internal Rate of Return (IRR) calculator for a list of NCFs against a given initial investment amount. The IRR will
+        /// be calculated between the min and max discount rate passed and incremented by the amount specified until the IRR is
+        /// found (i.e. NPV closest to zero).
+        /// </summary>
+        /// <param name="ncfs">NET Present Value (NCF) list.</param>
+        /// <param name="initialInvestment">Initial investment amount (use positive number).</param>
+        /// <param name="minDiscountRate">Minimum discount rate.</param>
+        /// <param name="maxDiscountRate">Maximum discount rate.</param>
+        /// <param name="rateIncrement">Increment amount from min to max discount rate.</param>
+        /// <param name="irrNpv"><see cref="INPV"/> instance for the IRR.</param>
+        /// <param name="useRoundedDiscountFactor">Use rounded discount factor in NPV calculations (default is <see langword="false"/></param>
+        /// <returns>IRR value (discount rate at which NPV is closes to zero).</returns>
         public static double GetIRR(IList<decimal> ncfs, decimal initialInvestment, double minDiscountRate, 
             double maxDiscountRate, double rateIncrement, out INPV? irrNpv, bool useRoundedDiscountFactor = false)
         {
