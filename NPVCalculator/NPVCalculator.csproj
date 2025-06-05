@@ -8,6 +8,8 @@
     <Title>NPV and IRR calculator</Title>
     <Authors>JPS</Authors>
     <Description>Project management NET Present Value (NPV) and Internal Rate of Return (IRR) calculator.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Suppress missing XML comment warnings -->
   </PropertyGroup>
 
 </Project>
