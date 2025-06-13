@@ -10,8 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="ViewModels\" />
+    <None Remove="Images\Delete.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NPVCalculator\NPVCalculator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Delete.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

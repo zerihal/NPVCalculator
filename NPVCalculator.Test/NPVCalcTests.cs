@@ -24,7 +24,8 @@
             var NCFs = new List<decimal> { 85000, 85000, 110000, 115000, 135000 };
 
             // Create a NPV calculator with a discount rate of 10% - this should have 5 NCFs
-            var npvCalc = new NpvCalc(NCFs, 10) { UseRoundedDiscountingFactor = true };
+            var npvCalc = new NpvCalc(NCFs, 10);
+            npvCalc.Settings.UseRoundedDiscountingFactor = true;
             Assert.True(npvCalc.NCFs.Count == 5);
 
             // With initial investment of 275,000, the total NPV should be 117,300

@@ -15,25 +15,9 @@ namespace NPVCalculator
         public IList<decimal> NCFs { get; set; }
 
         /// <summary>
-        /// Discount rate (%) to use for NPV calculation.
+        /// Calculation settings.
         /// </summary>
-        public double DiscountRate { get; set; }
-
-        /// <summary>
-        /// Discounting factor decimal places (for rounding).
-        /// </summary>
-        public int DiscountingFactorDecimalPlaces { get; set; } = 2;
-
-        /// <summary>
-        /// NPV decimal places (for rounding).
-        /// </summary>
-        public int NPVDecimalPlaces { get; set; } = 0;
-
-        /// <summary>
-        /// If set to true, the calculation for NPV uses the rounded discounting factor value rather than the raw
-        /// value (default is <see langword="false"/>).
-        /// </summary>
-        public bool UseRoundedDiscountingFactor { get; set; } = false;
+        public ICalcSettings Settings { get; set; }
 
         #endregion
 
@@ -42,12 +26,13 @@ namespace NPVCalculator
         public NpvCalc()
         {
             NCFs = new List<decimal>();
+            Settings = new CalcSettings();
         }
 
         public NpvCalc(IList<decimal> nCFs, double discountRate) : this()
         {
             NCFs = nCFs;
-            DiscountRate = discountRate;
+            Settings.DiscountRate = discountRate;
         }
 
         #endregion
@@ -62,7 +47,7 @@ namespace NPVCalculator
         /// <returns><see cref="INPV"/> instance with overall and individual NPVs.</returns>
         public INPV GetNPVs(decimal initialInvestment)
         {
-            var discountRatioDivider = 1 + (DiscountRate / 100);
+            var discountRatioDivider = 1 + (Settings.DiscountRate / 100);
 
             var npvs = new NPV();
             npvs.Add(-initialInvestment, null);
@@ -70,10 +55,10 @@ namespace NPVCalculator
             for (var i = 0; i < NCFs.Count; i++)
             {
                 var discountingFactor = 1 / (decimal)Math.Pow(discountRatioDivider, i + 1);
-                var roundedDiscountingFactor = decimal.Round(discountingFactor, DiscountingFactorDecimalPlaces, MidpointRounding.AwayFromZero);
+                var roundedDiscountingFactor = decimal.Round(discountingFactor, Settings.DiscountingFactorDecimalPlaces, MidpointRounding.AwayFromZero);
                 
-                var npv = decimal.Round(NCFs[i] * (UseRoundedDiscountingFactor ? roundedDiscountingFactor : discountingFactor), 
-                    NPVDecimalPlaces, MidpointRounding.AwayFromZero);
+                var npv = decimal.Round(NCFs[i] * (Settings.UseRoundedDiscountingFactor ? roundedDiscountingFactor : discountingFactor), 
+                    Settings.NPVDecimalPlaces, MidpointRounding.AwayFromZero);
 
                 npvs.Add(npv, roundedDiscountingFactor);
             }

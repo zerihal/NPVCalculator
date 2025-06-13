@@ -3,13 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xtk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:vm="clr-namespace:NPV_Calculator_UI.ViewModels"
+        xmlns:controls="clr-namespace:NPV_Calculator_UI.Controls"
         xmlns:local="clr-namespace:NPV_Calculator_UI"
         mc:Ignorable="d"
-        Title="NPV Calculator" Height="450" Width="800">
+        Title="NPV Calculator" Height="450" Width="950">
+    <Window.DataContext>
+        <vm:CalcUIViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5">
@@ -28,22 +35,48 @@
                     <StackPanel.Resources>
                         <Style TargetType="TextBlock">
                             <Setter Property="Margin" Value="5,0"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </StackPanel.Resources>
-                    
-                    <TextBlock Text="Discount Rate (%):" Margin="5,0"/>
-                    <TextBox Margin="5,0" Width="30"/>
-                    <TextBlock Text="Discount factor DP:" Margin="5,0"/>
-                    <TextBox Margin="5,0" Width="20"/>
+
+                    <TextBlock Text="Initial Investment:"/>
+                    <controls:NumericTextBox MinWidth="100" VerticalAlignment="Center" Margin="5,0"/>
+                    <TextBlock Text="Discount Rate (%):"/>
+                    <xtk:DoubleUpDown Margin="5,0" MinWidth="50" Height="20" Minimum="0" Maximum="100" Value="{Binding DiscountRate}"/>
+                    <TextBlock Text="Discount factor DP:"/>
+                    <xtk:IntegerUpDown Margin="5.0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding DiscountFactorDp}"/>
                     <TextBlock Text="NPV DP:"/>
-                    <TextBox Margin="5,0" Width="20"/>
-                    <CheckBox Content="Round discount factor in calculation" FlowDirection="RightToLeft" VerticalAlignment="Center" Margin="5,0"/>
+                    <xtk:IntegerUpDown Margin="5.0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding NpvDp}"/>
+                    <CheckBox Content="Round discount factor in calculation" FlowDirection="RightToLeft" 
+                              VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding RoundDiscountFactorCalc}">
+                        <CheckBox.Resources>
+                            <Style TargetType="{x:Type Path}">
+                                <Setter Property="FlowDirection" Value="LeftToRight"/>
+                            </Style>
+                        </CheckBox.Resources>
+                    </CheckBox>
                 </StackPanel>
             </Grid>
         </Border>
 
         <Border Grid.Row="1" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5,0,5,5">
-            
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                <controls:CalcTable DataContext="{Binding CalcTable}" CalcSettings="{Binding CurrentCalcSettings, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </ScrollViewer>
+        </Border>
+
+        <Border Grid.Row="2" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5,0,5,5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Padding" Value="5,0"/>
+                        <Setter Property="Margin" Value="5,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Content="Calculate NPV" Command="{Binding CalculateNPV}"/>
+                <Button Content="Calculate IRR" Command="{Binding CalculateIRR}"/>
+                <Button Content="Clear" />
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

@@ -23,7 +23,8 @@ namespace NPVCalculator
             double maxDiscountRate, double rateIncrement, out INPV? irrNpv, bool useRoundedDiscountFactor = false)
         {
             // Create a new NPC calculator with default settings
-            var npvCalc = new NpvCalc(ncfs, minDiscountRate) { UseRoundedDiscountingFactor = useRoundedDiscountFactor };
+            var npvCalc = new NpvCalc(ncfs, minDiscountRate);
+            npvCalc.Settings.UseRoundedDiscountingFactor = useRoundedDiscountFactor;
 
             // Iterate through rates to find the NPV closest to zero
             var rate = minDiscountRate;
@@ -31,7 +32,7 @@ namespace NPVCalculator
 
             while (rate <= maxDiscountRate)
             {
-                npvCalc.DiscountRate = rate;
+                npvCalc.Settings.DiscountRate = rate;
                 var currentNpv = npvCalc.GetNPVs(initialInvestment);
 
                 if (lastNpv != null)
