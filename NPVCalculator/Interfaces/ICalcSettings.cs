@@ -9,7 +9,7 @@ namespace NPVCalculator.Interfaces
     public interface ICalcSettings
     {
         /// <summary>
-        /// 
+        /// Notification that calculator settings have been changed.
         /// </summary>
         event EventHandler CalcSettingsChanged;
 
