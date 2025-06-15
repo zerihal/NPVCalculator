@@ -6,7 +6,6 @@
         xmlns:xtk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:vm="clr-namespace:NPV_Calculator_UI.ViewModels"
         xmlns:controls="clr-namespace:NPV_Calculator_UI.Controls"
-        xmlns:converters="clr-namespace:NPV_Calculator_UI.Converters"
         xmlns:local="clr-namespace:NPV_Calculator_UI"
         mc:Ignorable="d"
         Title="NPV Calculator" Height="450" Width="950">
