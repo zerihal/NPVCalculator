@@ -1,5 +1,6 @@
 ﻿using NPV_Calculator_UI.Commands;
 using NPV_Calculator_UI.EventArguments;
+using NPV_Calculator_UI.Strings;
 using NPVCalculator;
 using NPVCalculator.Interfaces;
 using System.Collections.ObjectModel;
@@ -10,21 +11,35 @@ namespace NPV_Calculator_UI.ViewModels
     public class CalcTableViewModel : PropertyChangedBase
     {
         private ICalcSettings _calcSettings;
+        private string _totalNpvIrr = SR.NoTotalNpvIrr;
+        private string _totalNpvIrrLabel = SR.EmptyTotalNpvIrrLabel;
         private decimal _initialInvestment;
 
         public event EventHandler<NcfValuesChangedEventArgs>? NcfValuesChanged;
 
         public ObservableCollection<NcfViewModel> Values { get; set; }
 
-        public decimal InitialInvestment
-        {
-            get => _initialInvestment;
+        public decimal InitialInvestment 
+        { 
+            get => _initialInvestment; 
             set
             {
                 if (_initialInvestment == value) return;
                 _initialInvestment = value;
                 ClearPreviousCalcs();
             }
+        }
+
+        public string TotalNpvIrr
+        {
+            get => _totalNpvIrr;
+            set => SetField(ref _totalNpvIrr, value);
+        }
+
+        public string TotalNpvIrrLabel
+        {
+            get => _totalNpvIrrLabel;
+            set => SetField(ref _totalNpvIrrLabel, value);
         }
 
         public ICommand AddNcf { get; }
@@ -37,10 +52,14 @@ namespace NPV_Calculator_UI.ViewModels
             Values = new ObservableCollection<NcfViewModel>();
             AddNcf = new RelayCommand(OnAddNcf);
             RemoveNcf = new RelayCommand(OnRemoveNcf);
+
+            _calcSettings.CalcSettingsChanged += OnCalcSettingsChanged;
         }
 
         public void Calculate(CalculationType calcType)
         {
+            if (!Values.Any()) return;
+
             switch (calcType)
             {
                 case CalculationType.NPV:
@@ -54,24 +73,22 @@ namespace NPV_Calculator_UI.ViewModels
                         Values[i].Update(NPVs.IndividualNPVsAndDiscountFactors[i + 1]);
                     }
 
-                    // ToDo - Update total
+                    TotalNpvIrrLabel = SR.TotalNpvLabel;
+                    TotalNpvIrr = NPVs.TotalNPV.ToString();
 
                     break;
 
                 case CalculationType.IRR:
-                    // ToDo ...
+                    var irr = IRRCalc.GetIRR(Values.Select(v => v.NCFValue).ToList(), InitialInvestment, 1, 99, 1, out _);
+                    TotalNpvIrrLabel = SR.IrrLabel;
+                    TotalNpvIrr = $"{irr}%";
                     break;
 
                 case CalculationType.Clear:
-                    // ToDo ...
+                    ClearPreviousCalcs();
+                    Values.Clear();
                     break;
             }
-        }
-
-        public void UpdateCalcSettings(ICalcSettings newSettings)
-        {
-            _calcSettings = newSettings;
-            ClearPreviousCalcs();
         }
 
         private void OnRemoveNcf(object obj)
@@ -93,14 +110,18 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        private void OnCalcSettingsChanged(object? sender, EventArgs e)
+        {
+            ClearPreviousCalcs();
+        }
+
         private void ClearPreviousCalcs()
         {
-            // ToDo: Put in something here to check whether already cleared - no need to do again if so
-
             foreach (var value in Values)
-            {
                 value.Update(null);
-            }
+
+            TotalNpvIrrLabel = SR.EmptyTotalNpvIrrLabel;
+            TotalNpvIrr = SR.NoTotalNpvIrr;
         }
 
         private void OnNcfValuesChanged(NcfValuesChangedEventArgs e) => NcfValuesChanged?.Invoke(this, e);

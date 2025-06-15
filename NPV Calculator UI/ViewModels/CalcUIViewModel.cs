@@ -12,18 +12,12 @@ namespace NPV_Calculator_UI.ViewModels
         private int _discountFactorDp;
         private int _npvDp;
         private bool _roundDiscountFactorCalc;
-        private decimal _initialInvestment;
+        private string _initialInvestment = string.Empty;
 
-        public decimal InitialInvestment
+        public string InitialInvestment
         {
             get => _initialInvestment;
-            set
-            {
-                if (SetField(ref _initialInvestment, value))
-                {
-                    CalcTable.InitialInvestment = value;
-                }
-            }
+            set => SetField(ref _initialInvestment, value, onAfterPropertyChanged: InitInvestmentUpdated);
         }
 
         public double DiscountRate
@@ -34,7 +28,7 @@ namespace NPV_Calculator_UI.ViewModels
                 if (SetField(ref _discountRate, value))
                 {
                     CurrentCalcSettings.DiscountRate = value;
-                    OnPropertyChanged(nameof(CurrentCalcSettings));
+                    OnPropertyChanged(nameof(CurrentCalcSettings)); 
                 }
             }
         }
@@ -97,28 +91,27 @@ namespace NPV_Calculator_UI.ViewModels
 
         public ObservableCollection<NcfViewModel>? Values { get; set; }
 
-        public ICommand CalculateNPV { get; }
-
-        public ICommand CalculateIRR { get; }
+        public ICommand UpdateCalculator { get; }
 
         public CalcUIViewModel()
         {
             CurrentCalcSettings = new CalcSettings();
             CalcTable = new CalcTableViewModel(CurrentCalcSettings);
-            CalculateNPV = new RelayCommand(DoNPVCalc, CanExecuteCalculations);
-            CalculateIRR = new RelayCommand(DoIRRCalc, CanExecuteCalculations);
+            UpdateCalculator = new RelayCommand(DoRecalc, CanExecuteCalculations);
         }
 
         public bool CanExecuteCalculations(object param) => CalcTable.Values.Count > 0;
 
-        private void DoNPVCalc(object param)
+        private void InitInvestmentUpdated()
         {
-            CalcTable.Calculate(CalculationType.NPV);
+            if (decimal.TryParse(InitialInvestment, out var initInvestmentValue))
+                CalcTable.InitialInvestment = initInvestmentValue;
         }
 
-        private void DoIRRCalc(object param)
+        private void DoRecalc(object param)
         {
-            CalcTable.Calculate(CalculationType.IRR);
+            if (param is CalculationType calcType)
+                CalcTable.Calculate(calcType);
         }
     }
 }

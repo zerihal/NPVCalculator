@@ -9,6 +9,11 @@ namespace NPVCalculator.Interfaces
     public interface ICalcSettings
     {
         /// <summary>
+        /// 
+        /// </summary>
+        event EventHandler CalcSettingsChanged;
+
+        /// <summary>
         /// Discount rate (%) to use for NPV calculation.
         /// </summary>
         double DiscountRate { get; set; }
