@@ -1,4 +1,5 @@
 ﻿using NPV_Calculator_UI.Commands;
+using NPV_Calculator_UI.Controls;
 using NPV_Calculator_UI.EventArguments;
 using NPV_Calculator_UI.Strings;
 using NPVCalculator;
@@ -15,10 +16,19 @@ namespace NPV_Calculator_UI.ViewModels
         private string _totalNpvIrrLabel = SR.EmptyTotalNpvIrrLabel;
         private decimal _initialInvestment;
 
+        /// <summary>
+        /// Event to indicate that NCF values have been changed (i.e. NCF added or removed).
+        /// </summary>
         public event EventHandler<NcfValuesChangedEventArgs>? NcfValuesChanged;
 
+        /// <summary>
+        /// NCF values.
+        /// </summary>
         public ObservableCollection<NcfViewModel> Values { get; set; }
 
+        /// <summary>
+        /// Initial investment value.
+        /// </summary>
         public decimal InitialInvestment 
         { 
             get => _initialInvestment; 
@@ -30,20 +40,32 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Total NPV or IRR.
+        /// </summary>
         public string TotalNpvIrr
         {
             get => _totalNpvIrr;
             set => SetField(ref _totalNpvIrr, value);
         }
 
+        /// <summary>
+        /// Total NPV or IRR label.
+        /// </summary>
         public string TotalNpvIrrLabel
         {
             get => _totalNpvIrrLabel;
             set => SetField(ref _totalNpvIrrLabel, value);
         }
 
+        /// <summary>
+        /// Command to add a new NCF value.
+        /// </summary>
         public ICommand AddNcf { get; }
 
+        /// <summary>
+        /// Command to remove a NCF value.
+        /// </summary>
         public ICommand RemoveNcf { get; }
 
         public CalcTableViewModel(ICalcSettings settings) 
@@ -103,10 +125,13 @@ namespace NPV_Calculator_UI.ViewModels
 
         private void OnAddNcf(object obj)
         {
-            if (obj is string ncfStr && decimal.TryParse(ncfStr, out var ncf))
+            if (obj is NumericTextBox numTb && decimal.TryParse(numTb.Text, out var ncf))
             {
                 Values.Add(new NcfViewModel(ncf));
                 OnNcfValuesChanged(new NcfValuesChangedEventArgs(NcfCollectionChangeType.Add, Values.Count()));
+
+                // Clear the textbox
+                numTb.Clear();
             }
         }
 

@@ -9,17 +9,23 @@ namespace NPV_Calculator_UI.ViewModels
     public class CalcUIViewModel : PropertyChangedBase
     {
         private double _discountRate;
-        private int _discountFactorDp;
+        private int _discountFactorDp = 2;
         private int _npvDp;
         private bool _roundDiscountFactorCalc;
         private string _initialInvestment = string.Empty;
 
+        /// <summary>
+        /// Initial investment value.
+        /// </summary>
         public string InitialInvestment
         {
             get => _initialInvestment;
             set => SetField(ref _initialInvestment, value, onAfterPropertyChanged: InitInvestmentUpdated);
         }
 
+        /// <summary>
+        /// Discount rate (%).
+        /// </summary>
         public double DiscountRate
         {
             get => _discountRate;
@@ -33,6 +39,9 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Discount factor decimal places.
+        /// </summary>
         public int DiscountFactorDp
         {
             get => _discountFactorDp;
@@ -46,6 +55,9 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// NPV decimal places.
+        /// </summary>
         public int NpvDp
         {
             get => _npvDp;
@@ -59,6 +71,9 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Flag to indicate whether values should be rounded in discount factor calculation.
+        /// </summary>
         public bool RoundDiscountFactorCalc
         {
             get => _roundDiscountFactorCalc;
@@ -72,25 +87,24 @@ namespace NPV_Calculator_UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Calculation table view model.
+        /// </summary>
         public CalcTableViewModel CalcTable { get; }
 
+        /// <summary>
+        /// Current calculator settings.
+        /// </summary>
         public ICalcSettings CurrentCalcSettings { get; }
 
-        public IList<NcfViewModel> TempNcfs
-        {
-            get
-            {
-                var temp = new List<NcfViewModel>();
-                temp.Add(new NcfViewModel { NCFValue = 100 });
-                temp.Add(new NcfViewModel { NCFValue = 5 });
-                temp.Add(new NcfViewModel { NCFValue = 1210 });
-
-                return temp;
-            }
-        }
-
+        /// <summary>
+        /// NCF values (to use for calculations).
+        /// </summary>
         public ObservableCollection<NcfViewModel>? Values { get; set; }
 
+        /// <summary>
+        /// Update calculator command.
+        /// </summary>
         public ICommand UpdateCalculator { get; }
 
         public CalcUIViewModel()
@@ -100,6 +114,11 @@ namespace NPV_Calculator_UI.ViewModels
             UpdateCalculator = new RelayCommand(DoRecalc, CanExecuteCalculations);
         }
 
+        /// <summary>
+        /// Can execute calculations delegate.
+        /// </summary>
+        /// <param name="param">Command parameter.</param>
+        /// <returns><see langword="True"/> if calculation table contains any NCF values, otherwise <see langword="false"/>.</returns>
         public bool CanExecuteCalculations(object param) => CalcTable.Values.Count > 0;
 
         private void InitInvestmentUpdated()

@@ -14,59 +14,83 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5">
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Margin="0,0,0,5" 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Margin="0,0,0,5" 
                            Text="Calculator Settings" 
                            HorizontalAlignment="Center" 
                            FontWeight="Bold"/>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                    <StackPanel.Resources>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Margin" Value="5,0"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <TextBlock Text="Initial Investment:"/>
-                    <controls:NumericTextBox MinWidth="100" VerticalAlignment="Center" Margin="5,0" Text="{Binding InitialInvestment, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock Text="Discount Rate (%):"/>
-                    <xtk:DoubleUpDown Margin="5,0" MinWidth="50" Height="20" Minimum="0" Maximum="100" Value="{Binding DiscountRate}"/>
-                    <TextBlock Text="Discount factor DP:"/>
-                    <xtk:IntegerUpDown Margin="5.0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding DiscountFactorDp}"/>
-                    <TextBlock Text="NPV DP:"/>
-                    <xtk:IntegerUpDown Margin="5.0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding NpvDp}"/>
-                    <CheckBox Content="Round discount factor in calculation" FlowDirection="RightToLeft" 
-                              VerticalAlignment="Center" Margin="5,0" IsChecked="{Binding RoundDiscountFactorCalc}">
-                        <CheckBox.Resources>
-                            <Style TargetType="{x:Type Path}">
-                                <Setter Property="FlowDirection" Value="LeftToRight"/>
+                    <Grid Grid.Row="1">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="5"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
-                        </CheckBox.Resources>
-                    </CheckBox>
-                </StackPanel>
-            </Grid>
-        </Border>
+                        </Grid.Resources>
 
-        <Border Grid.Row="1" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5,0,5,5">
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
-                <controls:CalcTable DataContext="{Binding CalcTable}" 
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Initial Investment:"/>
+                        <controls:NumericTextBox Grid.Column="1" MinWidth="100" VerticalAlignment="Center" Margin="5,0" 
+                                                 Text="{Binding InitialInvestment, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Grid.Row="1" Text="Discount Rate (%):"/>
+                        <xtk:DoubleUpDown Grid.Row="1" Grid.Column="1" Margin="5,0" MinWidth="50" Height="20" Minimum="0" Maximum="100" Value="{Binding DiscountRate}" HorizontalAlignment="Left"/>
+
+                        <TextBlock Grid.Row="2" Text="Discount factor DP:"/>
+                        <xtk:IntegerUpDown Grid.Row="2" Grid.Column="1" Margin="5,0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding DiscountFactorDp}" HorizontalAlignment="Left"/>
+
+                        <TextBlock Grid.Row="3" Text="NPV DP:"/>
+                        <xtk:IntegerUpDown Grid.Row="3" Grid.Column="1" Margin="5,0" Width="45" Height="20" Minimum="0" Maximum="10" Value="{Binding NpvDp}" HorizontalAlignment="Left"/>
+
+                        <CheckBox Content="Round discount factor in calculation" FlowDirection="RightToLeft" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Left"
+                              VerticalAlignment="Center" Margin="5" IsChecked="{Binding RoundDiscountFactorCalc}">
+                            <CheckBox.Resources>
+                                <Style TargetType="{x:Type Path}">
+                                    <Setter Property="FlowDirection" Value="LeftToRight"/>
+                                </Style>
+                            </CheckBox.Resources>
+                        </CheckBox>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5">
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                    <controls:CalcTable DataContext="{Binding CalcTable}" 
                                     CalcSettings="{Binding CurrentCalcSettings, RelativeSource={RelativeSource AncestorType=Window}}"/>
-            </ScrollViewer>
-        </Border>
-
-        <Border Grid.Row="2" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5,0,5,5">
+                </ScrollViewer>
+            </Border>
+        </Grid>
+        
+        <Border Grid.Row="1" CornerRadius="5" BorderThickness="1" BorderBrush="DarkGray" HorizontalAlignment="Stretch" Margin="5,0,5,5">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                 <StackPanel.Resources>
                     <Style TargetType="Button">

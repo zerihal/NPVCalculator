@@ -12,6 +12,9 @@ namespace NPV_Calculator_UI.Controls
         public static readonly DependencyProperty CalcSettingsProperty = DependencyProperty.Register(nameof(CalcSettings), 
             typeof(ICalcSettings), typeof(CalcTable), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Calculator settings.
+        /// </summary>
         public ICalcSettings CalcSettings
         {
             get => (ICalcSettings)GetValue(CalcSettingsProperty);

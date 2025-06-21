@@ -5,9 +5,12 @@ using System.Windows.Input;
 
 namespace NPV_Calculator_UI.Controls
 {
+    /// <summary>
+    /// Simple textbox that only accepts numeric input and max of 1 decimal point.
+    /// </summary>
     public class NumericTextBox : TextBox
     {
-        private readonly Regex _regex = new Regex("[^0-9.-]+");
+        private readonly Regex _regex = new Regex("[^0-9.]+");
 
         public NumericTextBox()
         {

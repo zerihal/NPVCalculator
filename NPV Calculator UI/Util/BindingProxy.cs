@@ -6,6 +6,9 @@ namespace NPV_Calculator_UI.Util
     {
         protected override Freezable CreateInstanceCore() => new BindingProxy();
 
+        /// <summary>
+        /// Binding data.
+        /// </summary>
         public object Data
         {
             get => GetValue(DataProperty);
