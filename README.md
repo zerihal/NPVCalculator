@@ -10,3 +10,5 @@
 ## UI Application
 
 Simple Windows UI application that uses the API to enter calculation parameters, perform calculations, and display results.
+
+![Samples](Samples/NPVCalculatorSample.png)
