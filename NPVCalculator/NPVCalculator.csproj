@@ -10,6 +10,10 @@
     <Description>Project management NET Present Value (NPV) and Internal Rate of Return (IRR) calculator.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn> <!-- Suppress missing XML comment warnings -->
+    <Version>1.0.0-alpha.0</Version>   
+    <RepositoryUrl>https://github.com/zerihal/NPVCalculator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/zerihal/NPVCalculator</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
